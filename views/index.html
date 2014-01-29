@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+   <script id='vcardTemplate' type='text/x-jquery-tmpl'>
+    <div class="col-xs-12 col-md-6">
+        <div class="alert alert-danger">
+            <h2>${name}</h2>
+            <img class='img-circle' src='uploads/${nickname}.jpg' width='96' height='96' data-toggle='photo' data-nickname="${nickname}" />
+            <span class="label label-warning">Tel: ${tel}</span>
+
+            <p><input type='file' class="btn btn-large btn-info" name='filename' id="photo-${nickname}">
+            <p><button class="btn btn-large btn-info" data-toggle='upload-photo' data-nickname="${nickname}">Upload Photo</button></p>
+        </div>
+    </div>
+  </script>
+  <body>
+    <div class="container">
+        <div class="page-header">
+            <h1>VCard Service</h1>
+        </div>
+        <div class="row">
+            <div id="userList"></div>
+        </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/jquery-tmpl/jquery.tmpl.min.js"></script>
+    <script id='vcardTemplate' type='text/x-jquery-tmpl'/>
+     <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/1/user',
+            type: 'GET',
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+                $("#vcardTemplate").tmpl(data).appendTo( "#userList" );
+            },
+            complete: function (textStatus, jqXHR) {
+                $("button[data-toggle='upload-photo']").on('click', function() {
+                    var nickname = $(this).data('nickname');
+                    var data = new FormData();
+                    data.append('file', $('#photo-' + nickname)[0].files[0]);
+
+                    $.ajax({
+                            url: '/1/user/' + nickname + '/photo',
+                            data: data,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            type: 'POST',
+                            success: function() {
+                                $("img[data-nickname='" + nickname + "'").prop('src', '/uploads/' + nickname + '.jpg');
+                                console.log('photo upload success');
+                            }
+                    });
+                });
+            }
+        });
+    });
+    </script>
+  </body>
+</html>

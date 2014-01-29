@@ -1,0 +1,17 @@
+[
+  {
+    "nickname":"hank",
+    "name":"Hank Wang",
+    "tel":12345
+  },
+  {
+    "nickname":"jollen",
+    "name":"Jollen Chen",
+    "tel":54321
+  },
+  {
+    "nickname":"peggy",
+    "name":"Peggy Wang",
+    "tel":98765
+  }
+]

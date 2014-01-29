@@ -1,0 +1,6 @@
+doctype html
+html
+  head
+    title info jade
+  body
+    hi hi username
